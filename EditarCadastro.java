@@ -19,7 +19,7 @@ public class EditarCadastro extends JFrame {
     private final JButton ultimoRegistroJButton = new JButton(">>");
     private final JButton deletarRegistroJButton = new JButton("Deletar");
     private final JLabel notificacaoJLabel = new JLabel("Notificações...");
-    private final JButton adicionarNovoCadastroJButton = new JButton("Novo");
+    private final JButton adicionarNovoCadastroJButton = new JButton("Cadastrar");
     private final JButton limparCamposJButton = new JButton("Limpar");
     private final JButton pesquisarJButton = new JButton("🔍");
 
@@ -33,6 +33,7 @@ public class EditarCadastro extends JFrame {
         atualizarJButton.setToolTipText("Atualizar cadastro");
         add(pesquisarJButton);
         pesquisarJButton.setToolTipText("Pesquisar");
+        pesquisarJButton.setEnabled(false);
         
         
         add(nomeJLabel);
@@ -47,6 +48,7 @@ public class EditarCadastro extends JFrame {
         add(new JLabel());
         add(adicionarNovoCadastroJButton);
         adicionarNovoCadastroJButton.setToolTipText("Novo cadastro");
+        adicionarNovoCadastroJButton.setEnabled(false);
        
 
         add(senhaJLabel);
@@ -118,7 +120,7 @@ public class EditarCadastro extends JFrame {
                 adicionarNovoCadastro();
             }
         });
-        
+
         KeyAdapter keyAdapter = new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 atualizarJButton.setEnabled(true);
@@ -128,7 +130,7 @@ public class EditarCadastro extends JFrame {
         nomeTextField.addKeyListener(keyAdapter);
         emailTextField.addKeyListener(keyAdapter);
         senhaTextField.addKeyListener(keyAdapter);
-
+        
         atualizarJButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 atualizarRegistro();
@@ -230,6 +232,10 @@ public class EditarCadastro extends JFrame {
             NavegadorDeRegistro.adicionarNovoRegistro("db_teste", "tbl_teste", nomeTextField.getText(), emailTextField.getText(), new String(senhaTextField.getPassword()));
             notificacaoJLabel.setText("Cadastro adicionado com sucesso");
             carregarPrimeiroRegistro();
+            limparCamposJButton.setEnabled(true);
+            deletarRegistroJButton.setEnabled(true);
+            adicionarNovoCadastroJButton.setEnabled(false);
+
         } catch (Exception e) {
             notificacaoJLabel.setText("Erro ao adicionar novo cadastro: " + e.getMessage());
         }
@@ -240,12 +246,18 @@ public class EditarCadastro extends JFrame {
         senhaTextField.setText("");
         idTextField.setText("");
         atualizarJButton.setEnabled(false);
+        deletarRegistroJButton.setEnabled(false);
+        limparCamposJButton.setEnabled(false);
+        ultimoRegistroJButton.setEnabled(false);
+        proximoRegistroJButton.setEnabled(false);
+        adicionarNovoCadastroJButton.setEnabled(true);
+        pesquisarJButton.setEnabled(true);
     }
 
     private void atualizarBotoes(String idAtual) {
         try {
-            boolean primeiroRegistro = NavegadorDeRegistro.isPrimeiroRegistro("db_teste", "tbl_teste", idAtual);
-            boolean ultimoRegistro = NavegadorDeRegistro.isUltimoRegistro("db_teste", "tbl_teste", idAtual);
+            boolean primeiroRegistro = NavegadorDeRegistro.PrimeiroRegistro("db_teste", "tbl_teste", idAtual);
+            boolean ultimoRegistro = NavegadorDeRegistro.UltimoRegistro("db_teste", "tbl_teste", idAtual);
 
             primeiroRegistroJButton.setEnabled(!primeiroRegistro);
             registroAnteriorJButton.setEnabled(!primeiroRegistro);
@@ -266,6 +278,10 @@ public class EditarCadastro extends JFrame {
             senhaTextField.setText(resultado[3]);
             atualizarJButton.setEnabled(false);
             atualizarBotoes(resultado[0]);
+            limparCamposJButton.setEnabled(true);
+            deletarRegistroJButton.setEnabled(true);
+            adicionarNovoCadastroJButton.setEnabled(false);
+
         } catch (Exception e) {
             notificacaoJLabel.setText("Erro ao buscar o registro: " + e.getMessage());
         }

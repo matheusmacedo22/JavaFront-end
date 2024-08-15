@@ -65,26 +65,26 @@ public class NavegadorDeRegistro {
         return resultado;
     }
 
-    public static boolean isPrimeiroRegistro(String db, String tbl, String currentId) throws Exception {
+    public static boolean PrimeiroRegistro(String db, String tbl, String currentId) throws Exception {
         Connection conexao = MySQLConnector.conectar();
         String strSqlPrimeiroRegistro = "SELECT id FROM " + db + "." + tbl + " ORDER BY id ASC LIMIT 1;";
         Statement stmSqlPrimeiroRegistro = conexao.createStatement();
         ResultSet rstSqlPrimeiroRegistro = stmSqlPrimeiroRegistro.executeQuery(strSqlPrimeiroRegistro);
         rstSqlPrimeiroRegistro.next();
-        boolean isPrimeiro = rstSqlPrimeiroRegistro.getString("id").equals(currentId);
+        boolean Primeiro = rstSqlPrimeiroRegistro.getString("id").equals(currentId);
         stmSqlPrimeiroRegistro.close();
-        return isPrimeiro;
+        return Primeiro;
     }
 
-    public static boolean isUltimoRegistro(String db, String tbl, String currentId) throws Exception {
+    public static boolean UltimoRegistro(String db, String tbl, String currentId) throws Exception {
         Connection conexao = MySQLConnector.conectar();
         String strSqlUltimoRegistro = "SELECT id FROM " + db + "." + tbl + " ORDER BY id DESC LIMIT 1;";
         Statement stmSqlUltimoRegistro = conexao.createStatement();
         ResultSet rstSqlUltimoRegistro = stmSqlUltimoRegistro.executeQuery(strSqlUltimoRegistro);
         rstSqlUltimoRegistro.next();
-        boolean isUltimo = rstSqlUltimoRegistro.getString("id").equals(currentId);
+        boolean Ultimo = rstSqlUltimoRegistro.getString("id").equals(currentId);
         stmSqlUltimoRegistro.close();
-        return isUltimo;
+        return Ultimo;
     }
 
     public static void atualizarRegistro(String db, String tbl, String id, String nome, String email, String senha) throws Exception {
@@ -117,6 +117,7 @@ public class NavegadorDeRegistro {
         pstAdicionar.setString(3, senha);
         pstAdicionar.executeUpdate();
         pstAdicionar.close();
+
     }
 
     public static String[] buscarRegistro(String db, String tbl, String nomeOuEmail) throws Exception {
